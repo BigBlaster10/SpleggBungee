@@ -1,0 +1,4 @@
+name: SpleggBungee
+main: net.trompgames.bungee.MainBungee
+version: 0.1
+author: BigBlaster10
