@@ -19,54 +19,50 @@ public class MainBungee extends Plugin implements Listener{
 	@Override
 	public void onEnable(){
 		this.getProxy().registerChannel("spleggChannel");	
-        this.getProxy().getPluginManager().registerListener(this, this);    
-        this.getLogger().info("SPLEGG BUNGEE ENABLED");
+        	this.getProxy().getPluginManager().registerListener(this, this);    
+        	this.getLogger().info("Splegg Bugee Enabled");
 	}
 	
 	
 	@EventHandler
     public void onPluginMessage(PluginMessageEvent event) {
-        if (!event.getTag().equals("spleggChannel")) {
-            return;
-        }
+    		
+    if (!event.getTag().equals("spleggChannel")) {
+        return;
+    }
 
-        if (!(event.getSender() instanceof Server)) {
-            return;
-        }
+    if (!(event.getSender() instanceof Server)) {
+        return;
+    }
         
-        ServerInfo server = BungeeCord.getInstance().getPlayer(event.getReceiver().toString()).getServer().getInfo();
-        ByteArrayInputStream stream = new ByteArrayInputStream(event.getData());
-        DataInputStream in = new DataInputStream(stream);
-        String command = null;
-        try {
-			command = in.readUTF();
+    ServerInfo server = BungeeCord.getInstance().getPlayer(event.getReceiver().toString()).getServer().getInfo();
+    ByteArrayInputStream stream = new ByteArrayInputStream(event.getData());
+    DataInputStream in = new DataInputStream(stream);
+    String command = null;
+    try {
+		command = in.readUTF();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+        
+
+    if(command.equalsIgnoreCase("getStats")){
+       	String s = "NULL";
+		try {
+			s = in.readUTF();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-
-        if(command.equalsIgnoreCase("getStats")){
-        	String s = "NULL";
-			try {
-				s = in.readUTF();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        	ServerInfo info = getInfo(s);
-        	info.sendData("spleggChannel", event.getData());
-    		this.getLogger().info("Passed through data to: " + s);
+       	ServerInfo info = getInfo(s);
+       	info.sendData("spleggChannel", event.getData());
+    	//this.getLogger().info("Passed through data to: " + s);
         }
-        
-        
-        
-        
     }
 	
 	
 	public ServerInfo getInfo(String s){
         Map<String, ServerInfo> servers = BungeeCord.getInstance().getServers();
-
 		for (String key : servers.keySet()) {			
 			ServerInfo info = servers.get(key);
 			if(key.equals(s)) return info;
